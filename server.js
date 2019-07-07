@@ -1,5 +1,6 @@
 var express = require("express");
 var expressHandlebars = require("express-handlebars");
+var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 var path = require("path");
 var request = require("request");
@@ -17,12 +18,6 @@ var router = express.Router();
 // sets public folder as static directory
 app.use(express.static(__dirname + "/public"));
 
-// connects hdb to express app
-app.engine("handlebars", expressHandlebars({
-    defaultLayout: "main"
-}));
-app.set("view engine", "handlebars");
-
 // initiates body parser for app
 app.use(bodyParser.urlencoded({
     extended: false
@@ -30,6 +25,20 @@ app.use(bodyParser.urlencoded({
 
 // passes all requests through router middleware
 app.use(router);
+
+// connects hdb to express app
+app.engine("handlebars", expressHandlebars({
+    defaultLayout: "main"
+}));
+
+app.set("view engine", "handlebars");
+
+
+
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/any-name-will-do";
+
+mongoose.connect(MONGODB_URI);
+
 
 
 
